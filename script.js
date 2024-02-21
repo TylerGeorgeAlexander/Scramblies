@@ -1,7 +1,8 @@
 // Example theme and words
 const theme = "Ocean";
 const words = ["fish", "boat", "wave", "sand"];
-let scrambledLetters = shuffle(words.join('').split('')).join('');
+let allLetters = words.join('').split('');
+let scrambledLetters = shuffle(allLetters.slice()).join(''); // Use slice to copy the array
 let guesses = [];
 let guessCount = 0; // Initialize guess count
 
@@ -28,6 +29,18 @@ document.getElementById('submitGuess').addEventListener('click', () => {
         if (words.includes(guess)) {
             guesses.push(guess);
             document.getElementById('guesses').innerHTML = guesses.join(', ');
+
+            // Remove guessed word's letters from the letter pool
+            guess.split('').forEach(letter => {
+                const index = allLetters.indexOf(letter);
+                if (index > -1) {
+                    allLetters.splice(index, 1); // Remove the letter from the array
+                }
+            });
+
+            scrambledLetters = shuffle(allLetters.slice()).join(''); // Reshuffle remaining letters
+            document.getElementById('letters').textContent = scrambledLetters; // Update the display
+
             if (guesses.length === words.length) {
                 alert("Congratulations! You've found all the words.");
             }
