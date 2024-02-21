@@ -133,11 +133,12 @@ button:hover {
 
     #theme, #guessCount, #guess, button, .letter {
         font-size: 1.2rem; /* Larger text for desktop views */
+        text-shadow: rgb(255,199,29) 0.1rem 0 0.1rem; /* Enhanced text shadow for readability */
     }
 
     h1 {
         font-size: 2.5rem; /* Larger heading for desktop views */
-        text-shadow: 0.1rem 0.1rem 0 #000; /* Enhanced text shadow for readability */
+        /* text-shadow: rgb(143,227,30) 0.1rem 0 0.1rem; */
     }
 }
 
