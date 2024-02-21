@@ -8,16 +8,20 @@
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <div id="game">
-        <img src="/assets/Logo.png" alt="Scramblies Logo" id="logo" /> <!-- Logo added here -->
-        <h1>Scramblies</h1>
-        <div id="theme">Theme: <span></span></div>
-        <div id="letters"></div>
-        <input type="text" id="guess" placeholder="Your guess..." />
-        <button id="backspace">Backspace</button>
-        <button id="submitGuess">Submit Guess</button>
-        <div id="guesses"></div>
-        <div id="guessCount">Guesses Attempted: <span>0</span></div>
+    <div class="container"> <!-- Container added for two-column layout -->
+        <div id="logo">
+            <img src="/assets/Logo.png" alt="Scramblies Logo" style="max-width: 100%; height: auto;"> <!-- Ensure logo scales within its container -->
+        </div>
+        <div id="game">
+            <h1>Scramblies</h1>
+            <div id="theme">Theme: <span></span></div>
+            <div id="letters"></div>
+            <input type="text" id="guess" placeholder="Your guess..." />
+            <button id="backspace">Backspace</button>
+            <button id="submitGuess">Submit Guess</button>
+            <div id="guesses"></div>
+            <div id="guessCount">Guesses Attempted: <span>0</span></div>
+        </div>
     </div>
 
     <script src="script.js"></script>
