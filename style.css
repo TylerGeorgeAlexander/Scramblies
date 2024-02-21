@@ -12,19 +12,27 @@ body, html {
 
 #game {
     text-align: center;
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: #fff; /* White background for higher contrast */
-    border-radius: 10px;
-    border: 2px solid #000; /* Black border for clear delineation */
+    margin: 20px; /* Adjust as needed for spacing within the container card */
 }
+
 
 #logo {
     max-width: 100%;
-    height: auto;
-    margin-bottom: 20px;
+    padding: 20px; /* Add padding around the logo for spacing */
+    background-color: #fff; /* White background for the logo card */
+    border-radius: 10px; /* Rounded corners for the card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    border: 2px solid #000; /* Black border for clear delineation */
+    margin: 20px; /* Ensure spacing around the card */
     text-align: center;
 }
+
+/* Ensure the logo image fits well within the styled card */
+#logo img {
+    max-width: 100%;
+    height: auto;
+}
+
 
 #theme {
     margin-bottom: 20px;
@@ -85,6 +93,30 @@ button:hover {
     color: rgb(255,199,29); /* Yellow color for guess count */
     text-shadow: 1px 1px 0 #000; /* Black outline for better readability */
 }
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    max-width: 1200px;
+    padding: 20px; /* Add padding around the content for spacing */
+    background-color: #fff; /* White background for the card */
+    border-radius: 10px; /* Rounded corners for the card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    border: 2px solid #000; /* Black border for clear delineation */
+    margin: 20px auto; /* Center the card and ensure spacing around it */
+}
+
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: flex-start;
+    }
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
