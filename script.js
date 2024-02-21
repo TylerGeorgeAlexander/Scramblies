@@ -12,12 +12,13 @@ document.addEventListener("DOMContentLoaded", function () {
   let words = []; // Placeholder for fetched words
   let allLetters = [];
 
+  const correctGuessesElement = document.getElementById("correctGuesses").querySelector("span");
+  const incorrectGuessesElement = document.getElementById("incorrectGuesses").querySelector("span");
   const guessInput = document.getElementById("guess");
   const submitGuessButton = document.getElementById("submitGuess");
   const backspaceButton = document.getElementById("backspace");
   const scrambleButton = document.getElementById("scramble");
   const feedbackElement = document.getElementById("feedback");
-  const guessedWordsElement = document.getElementById("guessedWords");
   const lettersContainer = document.getElementById("letters");
   const timerElement = document.getElementById("timeLeft");
   const pauseTimerButton = document.getElementById("pauseTimer");
@@ -117,26 +118,35 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // submitGuess function
+  let correctGuesses = [];
+  let incorrectGuesses = [];
+  
   submitGuessButton.addEventListener("click", function () {
     const guess = guessInput.value.trim().toLowerCase();
     if (guess && words.includes(guess) && !guessedWords.includes(guess)) {
       guessedWords.push(guess);
-      guessedWordsElement.textContent = guessedWords.join(", ");
+      correctGuesses.push(guess); // Add to correct guesses
+      correctGuessesElement.textContent = correctGuesses.join(", "); // Update correct guesses display
       feedbackElement.textContent = "Correct guess!";
-      // Remove the guessed word's letters from allLetters
-      guess.split("").forEach((guessedLetter) => {
+      guessInput.value = ""; // Reset input field
+      // Remove guessed word's letters from allLetters
+      guess.split("").forEach(guessedLetter => {
         const index = allLetters.indexOf(guessedLetter);
         if (index > -1) {
           allLetters.splice(index, 1); // Remove the letter
         }
       });
-      updateLettersDisplay(); // Update the display with remaining letters
-      guessInput.value = ""; // Reset input field
+      updateLettersDisplay(); // Update display with remaining letters
       letterSelections = []; // Reset selections
-    } else if (guessedWords.includes(guess)) {
-      feedbackElement.textContent = "Already guessed!";
     } else {
-      feedbackElement.textContent = "Try again or incorrect guess!";
+      if (!guessedWords.includes(guess)) {
+        incorrectGuesses.push(guess); // Add to incorrect guesses if not already guessed
+        incorrectGuessesElement.textContent = incorrectGuesses.join(", "); // Update incorrect guesses display
+        feedbackElement.textContent = "Incorrect guess. Try again!";
+      } else {
+        feedbackElement.textContent = "Already guessed that word!";
+      }
+      guessInput.value = ""; // Reset input field for a new guess
     }
   });
 
