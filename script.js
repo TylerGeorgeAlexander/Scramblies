@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const themes = ["ocean", "space", "forest", "music", "sports", "animals", "food", "coding"];
     let words = []; // Placeholder for fetched words
+    let allLetters = [];
 
     const guessInput = document.getElementById('guess');
     const submitGuessButton = document.getElementById('submitGuess');
@@ -34,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function initializeGame(theme, wordsArray) {
         document.getElementById('theme').querySelector('span').textContent = theme;
-        let allLetters = wordsArray.join('').split('');
+        allLetters = wordsArray.join('').split('');
         allLetters = shuffle(allLetters);
         updateLettersDisplay(allLetters);
     }
@@ -48,10 +49,9 @@ document.addEventListener('DOMContentLoaded', function() {
         return array;
     }
 
-    // Function to update the letters display
-    function updateLettersDisplay(allLetters) {
+    // Function to update the letters display with current allLetters
+    function updateLettersDisplay() {
         lettersContainer.innerHTML = ''; // Clear previous letters
-        guessInput.value = '' // Clear input letters
         allLetters.forEach((letter, index) => {
             const letterElement = document.createElement('button');
             letterElement.textContent = letter;
@@ -95,20 +95,30 @@ document.addEventListener('DOMContentLoaded', function() {
         updateGuessInputAndSelections(); // Reflect this change in the input and visual state
     });
 
-    // Submit guess
+    // submitGuess function
     submitGuessButton.addEventListener('click', function() {
         const guess = guessInput.value.trim().toLowerCase();
-        if (guess && !guessedWords.includes(guess)) {
+        if (guess && words.includes(guess) && !guessedWords.includes(guess)) {
             guessedWords.push(guess);
             guessedWordsElement.textContent = guessedWords.join(', ');
             feedbackElement.textContent = "Correct guess!";
+            // Remove the guessed word's letters from allLetters
+            guess.split('').forEach(guessedLetter => {
+                const index = allLetters.indexOf(guessedLetter);
+                if (index > -1) {
+                    allLetters.splice(index, 1); // Remove the letter
+                }
+            });
+            updateLettersDisplay(); // Update the display with remaining letters
             guessInput.value = ''; // Reset input field
             letterSelections = []; // Reset selections
-            updateGuessInputAndSelections(); // Update the display
+        } else if (guessedWords.includes(guess)) {
+            feedbackElement.textContent = "Already guessed!";
         } else {
             feedbackElement.textContent = "Try again or incorrect guess!";
         }
     });
+
 
     // Scramble letters
     scrambleButton.addEventListener('click', function() {
