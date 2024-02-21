@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let guessedWords = [];
     let timer;
-    let timeLeft = 60; // Timer set for 1 minute
+    let timeElapsed = 0; // Initialize timeElapsed for the incremental timer
     let letterSelections = []; // Array to track the sequence of letter selections
 
     // Display today's date
@@ -116,16 +116,14 @@ document.addEventListener('DOMContentLoaded', function() {
         updateLettersDisplay(scrambledLetters);
     });
 
-    // Start and pause timer
+    // Start and pause timer function modified for incremental timing
     function startTimer() {
+        timerElement.textContent = '0:00'; // Initialize timer display
         timer = setInterval(() => {
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-                feedbackElement.textContent = "Time's up!";
-            } else {
-                timeLeft -= 1;
-                timerElement.textContent = timeLeft + ' seconds left';
-            }
+            timeElapsed += 1;
+            let minutes = Math.floor(timeElapsed / 60);
+            let seconds = timeElapsed % 60;
+            timerElement.textContent = minutes + ':' + (seconds < 10 ? '0' : '') + seconds; // Format to M:SS
         }, 1000);
     }
 
