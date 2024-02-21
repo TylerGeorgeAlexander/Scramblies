@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to update the letters display
     function updateLettersDisplay(allLetters) {
         lettersContainer.innerHTML = ''; // Clear previous letters
+        guessInput.value = '' // Clear input letters
         allLetters.forEach((letter, index) => {
             const letterElement = document.createElement('button');
             letterElement.textContent = letter;
