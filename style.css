@@ -1,14 +1,23 @@
 body, html {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    min-height: 100vh;
+    background-color: #f0f0f0;
 }
 
 #game {
     text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#logo {
+    max-width: 100%;
+    height: auto;
 }
 
 #letters {
@@ -18,7 +27,26 @@ body, html {
 
 #guess {
     margin: 10px 0;
+    padding: 10px;
+    width: calc(100% - 22px); /* Adjust based on padding */
 }
+
+button {
+    padding: 10px;
+    width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    #guess, button {
+        width: calc(100% - 20px); /* Adjust for smaller screens */
+    }
+
+    h1 {
+        font-size: 1.5em; /* Smaller heading on small screens */
+    }
+}
+
 
 .letter {
     cursor: pointer;
