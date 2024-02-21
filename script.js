@@ -3,7 +3,7 @@ const theme = "Ocean";
 const words = ["fish", "boat", "wave", "sand"];
 let scrambledLetters = shuffle(words.join('').split('')).join('');
 let guesses = [];
-const maxGuesses = 4;
+let guessCount = 0; // Initialize guess count
 
 // Shuffle function
 function shuffle(array) {
@@ -16,18 +16,19 @@ function shuffle(array) {
 
 // Set theme in HTML
 document.getElementById('theme').querySelector('span').textContent = theme;
-
 document.getElementById('letters').textContent = scrambledLetters;
 
 document.getElementById('submitGuess').addEventListener('click', () => {
     const guessInput = document.getElementById('guess');
     const guess = guessInput.value.trim().toLowerCase();
+    guessCount++; // Increment guess count on every attempt
+    document.getElementById('guessCount').querySelector('span').textContent = guessCount; // Update guess count display
 
-    if (guess && !guesses.includes(guess) && guesses.length < maxGuesses) {
+    if (guess && !guesses.includes(guess)) {
         if (words.includes(guess)) {
             guesses.push(guess);
             document.getElementById('guesses').innerHTML = guesses.join(', ');
-            if (guesses.length === maxGuesses) {
+            if (guesses.length === words.length) {
                 alert("Congratulations! You've found all the words.");
             }
         } else {
