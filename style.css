@@ -60,4 +60,6 @@ button {
 .letter.used {
     opacity: 0.5;
     cursor: not-allowed;
+    /* color: #ccc; */
+    pointer-events: none; /* Ensure they can't be clicked even if JS fails */
 }

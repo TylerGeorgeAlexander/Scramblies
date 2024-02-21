@@ -14,17 +14,38 @@ function shuffle(array) {
 function updateLettersDisplay(allLetters) {
     const lettersContainer = document.getElementById('letters');
     lettersContainer.innerHTML = ''; // Clear previous letters
-    shuffle(allLetters.slice()).forEach(letter => {
+    allLetters.forEach((letter, index) => {
         const letterElement = document.createElement('span');
         letterElement.textContent = letter;
-        letterElement.classList.add('letter');
-        letterElement.addEventListener('click', () => {
+        letterElement.classList.add('letter', `letter-${index}`); // Add unique class for each letter
+        letterElement.addEventListener('click', function() {
             document.getElementById('guess').value += letter;
-            letterElement.classList.add('used'); // Optional: visually mark the letter as used
+            this.classList.add('used');
+            this.removeEventListener('click', this.onclick);
         });
         lettersContainer.appendChild(letterElement);
     });
 }
+
+// Backspace functionality
+document.getElementById('backspace').addEventListener('click', () => {
+    let guessInput = document.getElementById('guess');
+    let currentGuess = guessInput.value;
+    if (currentGuess.length > 0) {
+        // Remove the last character from the input
+        const removedLetter = currentGuess[currentGuess.length - 1];
+        guessInput.value = currentGuess.substring(0, currentGuess.length - 1);
+        
+        // Re-enable the last used letter in the letter pool
+        const usedLetterElements = document.querySelectorAll(`.letter.used`);
+        const toBeReenabled = Array.from(usedLetterElements).reverse().find(el => el.textContent === removedLetter);
+        if (toBeReenabled) {
+            toBeReenabled.classList.remove('used');
+            toBeReenabled.addEventListener('click', toBeReenabled.onclick);
+            toBeReenabled.style.pointerEvents = 'auto'; // Re-enable pointer events
+        }
+    }
+});
 
 // Function to initialize game
 function initializeGame(theme, words) {
