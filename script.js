@@ -50,6 +50,7 @@ document.getElementById('backspace').addEventListener('click', () => {
 // Function to initialize game
 function initializeGame(theme, words) {
     let allLetters = words.join('').split('');
+    allLetters = shuffle(allLetters);
     let guesses = [];
     let guessCount = 0;
 
