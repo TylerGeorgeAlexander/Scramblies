@@ -12,8 +12,12 @@ document.addEventListener("DOMContentLoaded", function () {
   let words = []; // Placeholder for fetched words
   let allLetters = [];
 
-  const correctGuessesElement = document.getElementById("correctGuesses").querySelector("span");
-  const incorrectGuessesElement = document.getElementById("incorrectGuesses").querySelector("span");
+  const correctGuessesElement = document
+    .getElementById("correctGuesses")
+    .querySelector("span");
+  const incorrectGuessesElement = document
+    .getElementById("incorrectGuesses")
+    .querySelector("span");
   const guessInput = document.getElementById("guess");
   const submitGuessButton = document.getElementById("submitGuess");
   const backspaceButton = document.getElementById("backspace");
@@ -120,8 +124,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // submitGuess function
   let correctGuesses = [];
   let incorrectGuesses = [];
-  
-    function submitGuess() {
+
+  function submitGuess() {
     const guess = guessInput.value.trim().toLowerCase();
     if (guess && words.includes(guess) && !guessedWords.includes(guess)) {
       guessedWords.push(guess);
@@ -130,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
       feedbackElement.textContent = "Correct guess!";
       guessInput.value = ""; // Reset input field
       // Remove guessed word's letters from allLetters
-      guess.split("").forEach(guessedLetter => {
+      guess.split("").forEach((guessedLetter) => {
         const index = allLetters.indexOf(guessedLetter);
         if (index > -1) {
           allLetters.splice(index, 1); // Remove the letter
@@ -150,33 +154,32 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     // Clear used letters after processing the guess
     clearUsedLetters(); // This ensures the UI is updated irrespective of how the guess was submitted
+  }
 
-  };
+  // Update the click event listener to use the refactored function
+  submitGuessButton.addEventListener("click", submitGuess);
 
-    // Update the click event listener to use the refactored function
-    submitGuessButton.addEventListener('click', submitGuess);
-
-    // Listen for the Enter key press on the guess input
-    guessInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            submitGuess(); // Call submitGuess function directly if you want to refactor the existing click listener logic into a named function
-            clearUsedLetters(); // Call a function to clear the used letters
-        }
-    });
-
-    function clearUsedLetters() {
-        // Clear the letterSelections array
-        letterSelections = [];
-        
-        // Clear the input field
-        guessInput.value = '';
-    
-        // Remove the 'used' class from all letter buttons
-        document.querySelectorAll('.letter').forEach(button => {
-            button.classList.remove('used');
-        });
+  // Listen for the Enter key press on the guess input
+  guessInput.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      submitGuess(); // Call submitGuess function directly if you want to refactor the existing click listener logic into a named function
+      clearUsedLetters(); // Call a function to clear the used letters
     }
-    
+  });
+
+  function clearUsedLetters() {
+    // Clear the letterSelections array
+    letterSelections = [];
+
+    // Clear the input field
+    guessInput.value = "";
+
+    // Remove the 'used' class from all letter buttons
+    document.querySelectorAll(".letter").forEach((button) => {
+      button.classList.remove("used");
+    });
+  }
+
   // Scramble letters
   scrambleButton.addEventListener("click", function () {
     // Shuffle the current allLetters array
