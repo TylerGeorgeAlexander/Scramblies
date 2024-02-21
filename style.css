@@ -19,3 +19,17 @@ body, html {
 #guess {
     margin: 10px 0;
 }
+
+.letter {
+    cursor: pointer;
+    display: inline-block;
+    margin: 2px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.letter.used {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
