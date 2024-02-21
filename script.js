@@ -14,6 +14,9 @@ function shuffle(array) {
     return array;
 }
 
+// Set theme in HTML
+document.getElementById('theme').querySelector('span').textContent = theme;
+
 document.getElementById('letters').textContent = scrambledLetters;
 
 document.getElementById('submitGuess').addEventListener('click', () => {
