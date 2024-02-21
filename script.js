@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let guessedWords = [];
     let timer;
     let timeLeft = 60; // Timer set for 1 minute
+    let letterSelections = []; // Array to track the sequence of letter selections
 
     // Display today's date
     dateElement.textContent = new Date().toLocaleDateString();
@@ -47,57 +48,72 @@ document.addEventListener('DOMContentLoaded', function() {
         return array;
     }
 
-    // Update the letters display
+    // Function to update the letters display
     function updateLettersDisplay(allLetters) {
-        lettersContainer.innerHTML = '';
+        lettersContainer.innerHTML = ''; // Clear previous letters
         allLetters.forEach((letter, index) => {
             const letterElement = document.createElement('button');
             letterElement.textContent = letter;
-            letterElement.classList.add('letter', `letter-${index}`);
+            letterElement.classList.add('letter'); // Add letter class
+            
             letterElement.addEventListener('click', function() {
-                guessInput.value += letter;
-                this.classList.add('used');
+                toggleLetterSelection(letter, index, this);
             });
+            
             lettersContainer.appendChild(letterElement);
+        });
+    }
+
+    // Toggle the selection of letters
+    function toggleLetterSelection(letter, index, element) {
+        if (!element.classList.contains('used')) {
+            element.classList.add('used');
+            guessInput.value += letter;
+            letterSelections.push({ letter, index });
+        } else {
+            // Remove the selected letter
+            letterSelections = letterSelections.filter(selection => !(selection.letter === letter && selection.index === index));
+            updateGuessInputAndSelections(); // Update the input field and selections visually
+        }
+    }
+
+    // Function to update the guess input and letter selections based on `letterSelections`
+    function updateGuessInputAndSelections() {
+        guessInput.value = letterSelections.map(selection => selection.letter).join('');
+        // Reset all letters to unused state
+        document.querySelectorAll('.letter').forEach(button => button.classList.remove('used'));
+        // Mark currently selected letters as used
+        letterSelections.forEach(selection => {
+            document.getElementById('letters').children[selection.index].classList.add('used');
         });
     }
 
     // Backspace functionality
     backspaceButton.addEventListener('click', function() {
-        guessInput.value = guessInput.value.slice(0, -1);
+        letterSelections.pop(); // Remove the last selection
+        updateGuessInputAndSelections(); // Reflect this change in the input and visual state
     });
 
     // Submit guess
-    submitGuessButton.addEventListener('click', submitGuess);
-
-    // Keyboard support for submitting guess with Enter key
-    guessInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            submitGuess();
-        }
-    });
-
-    function submitGuess() {
+    submitGuessButton.addEventListener('click', function() {
         const guess = guessInput.value.trim().toLowerCase();
         if (guess && !guessedWords.includes(guess)) {
             guessedWords.push(guess);
             guessedWordsElement.textContent = guessedWords.join(', ');
             feedbackElement.textContent = "Correct guess!";
             guessInput.value = ''; // Reset input field
+            letterSelections = []; // Reset selections
+            updateGuessInputAndSelections(); // Update the display
         } else {
             feedbackElement.textContent = "Try again or incorrect guess!";
         }
-    }
+    });
 
     // Scramble letters
     scrambleButton.addEventListener('click', function() {
-        scrambleLetters(words.join('').split(''));
+        let scrambledLetters = shuffle(words.join('').split(''));
+        updateLettersDisplay(scrambledLetters);
     });
-
-    function scrambleLetters(letters) {
-        shuffle(letters);
-        updateLettersDisplay(letters);
-    }
 
     // Start and pause timer
     function startTimer() {
