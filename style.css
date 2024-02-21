@@ -6,34 +6,83 @@ body, html {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f0f0f0;
+    background-color: rgb(22,199,246); /* Blue background */
+    color: #000; /* Black text for better contrast */
 }
 
 #game {
     text-align: center;
     padding: 20px;
     box-sizing: border-box;
+    background-color: #fff; /* White background for higher contrast */
+    border-radius: 10px;
+    border: 2px solid #000; /* Black border for clear delineation */
 }
 
 #logo {
     max-width: 100%;
     height: auto;
+    margin-bottom: 20px;
 }
 
-#letters {
-    margin: 20px 0;
-    font-size: 24px;
+#theme {
+    margin-bottom: 20px;
+    color: rgb(143,227,30); /* Green color for theme text */
+    text-shadow: 1px 1px 0 #000; /* Black outline for better readability */
+}
+
+#letters .letter {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px;
+    background-color: rgb(255,199,29); /* Yellow background for letters */
+    color: #000; /* Black text for contrast */
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid #000; /* Black border for letters */
+    box-shadow: 0 0 0 1px #000; /* Black outline for clarity */
+    transition: transform 0.3s ease;
+}
+
+.letter.used {
+    background-color: rgb(255,69,111); /* Red background for used letters */
+    color: #fff; /* White text for contrast */
+    pointer-events: none;
+}
+
+.letter:hover {
+    transform: scale(1.1); /* Slight scale effect on hover */
 }
 
 #guess {
     margin: 10px 0;
     padding: 10px;
     width: calc(100% - 22px); /* Adjust based on padding */
+    border: 2px solid rgb(143,227,30); /* Green border */
+    border-radius: 5px;
+    color: #000; /* Black text for contrast */
+    box-shadow: 0 0 0 1px #000; /* Black outline for clarity */
 }
 
 button {
     padding: 10px;
     width: 100%;
+    background-color: rgb(255,69,111); /* Red background for buttons */
+    color: #fff; /* White text for contrast */
+    border: 2px solid #000; /* Black border for definition */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: rgb(22,199,246); /* Blue background on hover */
+}
+
+#guessCount {
+    margin-top: 20px;
+    color: rgb(255,199,29); /* Yellow color for guess count */
+    text-shadow: 1px 1px 0 #000; /* Black outline for better readability */
 }
 
 /* Responsive adjustments */
@@ -44,22 +93,6 @@ button {
 
     h1 {
         font-size: 1.5em; /* Smaller heading on small screens */
+        text-shadow: 1px 1px 0 #000; /* Black outline for headings */
     }
-}
-
-
-.letter {
-    cursor: pointer;
-    display: inline-block;
-    margin: 2px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.letter.used {
-    opacity: 0.5;
-    cursor: not-allowed;
-    /* color: #ccc; */
-    pointer-events: none; /* Ensure they can't be clicked even if JS fails */
 }
