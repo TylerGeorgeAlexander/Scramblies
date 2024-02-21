@@ -1,5 +1,5 @@
 // Example themes
-const themes = ["ocean", "space", "forest", "music", "sports", "animals", "food", "technology"];
+const themes = ["ocean", "space", "forest", "music", "sports", "animals", "food", "coding"];
 
 // Function to shuffle letters
 function shuffle(array) {
