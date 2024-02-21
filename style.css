@@ -1,153 +1,126 @@
 body, html {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background-color: rgb(22,199,246); /* Blue background */
-    color: #000; /* Black text for better contrast */
+    height: 100vh;
+    background-color: rgb(22,199,246); /* Primary Brand Color */
+    color: #000; /* High Contrast Text */
 }
 
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     width: 90%;
     max-width: 1200px;
-    padding: 2rem; /* Responsive padding */
-    background-color: #fff; /* White background for the card */
-    border-radius: 10px; /* Rounded corners for the card */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
-    border: 2px solid #000; /* Black border for clear delineation */
-    margin: 20px auto; /* Center the card and ensure spacing around it */
-}
-
-#logo, #game {
-    margin: 20px; /* Adjust as needed for spacing within the container card */
-}
-
-#logo {
-    padding: 20px; /* Add padding around the logo for spacing */
-    margin: 20px; /* Ensure spacing around the card */
-    text-align: center;
+    margin: 20px;
 }
 
 #logo img {
     max-width: 100%;
     height: auto;
+    padding: 1rem;
 }
 
 #game {
+    width: 100%;
+    max-width: 600px;
+    background-color: #fff; /* Background for Game Area */
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     text-align: center;
 }
 
-#theme, #guessCount, button, #guess {
-    font-size: 1rem; /* Base font size for readability */
-    margin: 1rem 0; /* Responsive margin */
-    text-shadow: 0.05rem 0.05rem 0 #000; /* Sharper text shadow for readability */
+.theme-style, .attempts-style {
+    font-weight: bold;
+    margin: 10px 0;
 }
 
-.letter {
-    display: inline-block;
-    margin: 0.25rem; /* Responsive margin */
-    padding: 0.5rem; /* Responsive padding */
-    background-color: rgb(255,199,29); /* Yellow background for letters */
-    color: #000; /* Black text for contrast */
+.theme-style {
+    color: rgb(143,227,30); /* Green */
+    font-size: 1.2rem;
+}
+
+.attempts-style {
+    color: rgb(255,199,29); /* Yellow */
+    font-size: 1rem;
+}
+
+.letters-style {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.letter, #backspace, #submitGuess, #scramble, #pauseTimer {
+    font-size: 1rem;
+    margin: 5px;
+    padding: 10px 15px;
+    background-color: rgb(255,69,111); /* Red */
+    color: #fff;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
-    border: 1px solid #000; /* Black border for letters */
-    box-shadow: 0 0 0 1px #000; /* Black outline for clarity */
-    transition: transform 0.3s ease;
-    font-size: 1.25rem; /* Larger letters for easy interaction */
+    transition: background-color 0.3s;
+}
+
+.letter:hover, #backspace:hover, #submitGuess:hover, #scramble:hover, #pauseTimer:hover {
+    background-color: rgb(22,199,246); /* Blue */
 }
 
 .letter.used {
-    background-color: rgb(255,69,111); /* Red background for used letters */
+    background-color: rgb(255,199,29); /* Red background for used letters */
     color: #fff; /* White text for contrast */
     pointer-events: none;
 }
 
-.letter:hover {
-    transform: scale(1.1); /* Slight scale effect on hover */
-}
-
-#guess {
-    width: calc(100% - 40px); /* Adjust width for padding and borders */
-    padding: 10px 20px;
-    border: 2px solid rgb(143,227,30); /* Green border */
-    border-radius: 5px;
-    color: #000; /* Black text for contrast */
-    box-shadow: 0 0 0 1px #000; /* Black outline for clarity */
-}
-
-button {
-    padding: 10px;
-    width: 100%;
-    background-color: rgb(255,69,111); /* Red background for buttons */
-    color: #fff; /* White text for contrast */
-    border: 2px solid #000; /* Black border for definition */
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: rgb(22,199,246); /* Blue background on hover */
-}
-
 .input-group {
-    position: relative;
     display: flex;
-    align-items: center;
+    margin: 10px 0;
 }
 
 #guess {
     flex-grow: 1;
-    border-radius: 5px 5px 5px 5px; /* Adjust for rounded corners on the left side */
+    margin-right: -1px; /* Align with backspace button */
+    border-radius: 5px 0 0 5px;
 }
 
 #backspace {
-    width: 20%;
-    border-radius: 5px 5px 5px 5px; /* Adjust for rounded corners on the right side */
-    padding: 0.5rem;
-    margin-left: .5rem;
-    border: 2px solid rgb(143,227,30); /* Match the guess input border */
-    background-color: rgb(255,69,111); /* Use the red color for the button */
-    color: #fff;
-    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-#backspace i {
-    font-size: 1rem; /* Adjust icon size as needed */
+#feedback {
+    color: rgb(255,69,111); /* Feedback Color */
+    margin-top: 10px;
+}
+
+#timer, #date {
+    margin: 10px 0;
+    font-size: 1rem;
+    color: rgb(22,199,246); /* Blue */
 }
 
 @media (min-width: 768px) {
     .container {
         flex-direction: row;
-        justify-content: space-around;
-        align-items: flex-start;
+        justify-content: space-between;
     }
 
-    #theme, #guessCount, #guess, button, .letter {
-        font-size: 1.2rem; /* Larger text for desktop views */
-        text-shadow: rgb(255,199,29) 0.1rem 0 0.1rem; /* Enhanced text shadow for readability */
+    #logo, #game {
+        width: 45%;
     }
 
-    h1 {
-        font-size: 2.5rem; /* Larger heading for desktop views */
-        /* text-shadow: rgb(143,227,30) 0.1rem 0 0.1rem; */
+    .theme-style, .attempts-style, .letter, #backspace, #submitGuess, #scramble, #pauseTimer {
+        font-size: 1.2rem; /* Larger Font Size for Desktop */
     }
 }
 
-@media (max-width: 600px) {
-    #guess, button {
-        width: 100%; /* Full width for smaller screens */
-    }
-
-    #theme, #guessCount, h1 {
-        font-size: 1.5em; /* Adjusted font size for smaller screens */
-    }
-}

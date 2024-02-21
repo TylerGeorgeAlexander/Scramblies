@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scramblies</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" /> <!-- FontAwesome -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
 </head>
 <body>
@@ -14,16 +14,20 @@
             <img src="./assets/Logo.png" alt="Scramblies Logo">
         </div>
         <div id="game">
+            <div id="date">Today: <span id="todayDate"></span></div>
             <h1>Scramblies</h1>
-            <div id="theme">Theme: <span></span></div>
-            <div id="letters"></div>
+            <div id="theme" class="theme-style">Theme: <span></span></div>
+            <button id="scramble">Scramble Letters</button>
+            <div id="letters" class="letters-style"></div>
             <div class="input-group">
-                <input type="text" id="guess" placeholder="Your guess..." aria-label="Your guess" />
-                <button id="backspace" aria-label="Delete last letter"><i class="fas fa-trash-alt"></i></button>
+                <input type="text" id="guess" placeholder="Your guess..." aria-label="Your guess">
+                <button id="backspace" aria-label="Delete last letter"><i class="fas fa-backspace"></i></button>
             </div>
-            <button id="submitGuess">Submit Guess</button>
-            <div id="guesses"></div>
-            <div id="guessCount">Guesses Attempted: <span>0</span></div>
+            <button id="submitGuess">Enter</button>
+            <div id="feedback" class="feedback-style"></div>
+            <div id="guesses">Guessed Words: <span id="guessedWords"></span></div>
+            <div id="guessCount" class="attempts-style">Guesses Attempted: <span>0</span></div>
+            <div id="timer">Timer: <span id="timeLeft"></span> <button id="pauseTimer">Pause</button></div>
         </div>
     </div>
 
