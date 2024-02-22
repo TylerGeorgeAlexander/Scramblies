@@ -158,6 +158,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // Clear used letters after processing the guess
     clearUsedLetters(); // This ensures the UI is updated irrespective of how the guess was submitted
     guessCountElement.innerText = `Guesses Attempted: ${guessCount}`;
+    // Check to see if any letters in the pool are left, if not, then the game is won!
+    gameOver()
+  }
+
+  async function gameOver(){
+    // One second timer
+    setTimeout(function(){ 
+        if(allLetters == 0) alert("You Won!")
+    }, 1000);
   }
 
   // Update the click event listener to use the refactored function
