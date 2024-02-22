@@ -1,104 +1,227 @@
-// Example themes
-const themes = ["ocean", "space", "forest", "music", "sports", "animals", "food", "coding"];
+document.addEventListener("DOMContentLoaded", function () {
+  const themes = [
+    "ocean",
+    "space",
+    "forest",
+    "music",
+    "sports",
+    "animals",
+    "food",
+    "coding",
+  ];
+  let words = []; // Placeholder for fetched words
+  let allLetters = [];
 
-// Function to shuffle letters
-function shuffle(array) {
+  const correctGuessesElement = document
+    .getElementById("correctGuesses")
+    .querySelector("span");
+  const incorrectGuessesElement = document
+    .getElementById("incorrectGuesses")
+    .querySelector("span");
+  const guessInput = document.getElementById("guess");
+  const submitGuessButton = document.getElementById("submitGuess");
+  const backspaceButton = document.getElementById("backspace");
+  const scrambleButton = document.getElementById("scramble");
+  const feedbackElement = document.getElementById("feedback");
+  const lettersContainer = document.getElementById("letters");
+  const timerElement = document.getElementById("timeLeft");
+  const pauseTimerButton = document.getElementById("pauseTimer");
+  const dateElement = document.getElementById("todayDate");
+  const guessCountElement = document.getElementById("guessCount");
+  const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+
+  let guessedWords = [];
+  let timer;
+  let timeElapsed = 0; // Initialize timeElapsed for the incremental timer
+  let letterSelections = []; // Array to track the sequence of letter selections
+
+  // Display today's date
+  dateElement.textContent = new Date().toLocaleDateString();
+
+  // Fetch and initialize game with random theme words
+  fetch(`https://api.datamuse.com/words?ml=${randomTheme}&max=10`)
+    .then((response) => response.json())
+    .then((data) => {
+      words = data
+        .filter((wordObj) => !wordObj.word.includes(" "))
+        .slice(0, 4)
+        .map((wordObj) => wordObj.word);
+      console.log("Fetched words:", words); // Log the fetched words for verification
+      initializeGame(randomTheme, words);
+    })
+    .catch((error) => console.error("Error fetching data:", error));
+
+  function initializeGame(theme, wordsArray) {
+    document.getElementById("theme").querySelector("span").textContent = theme;
+    allLetters = wordsArray.join("").split("");
+    allLetters = shuffle(allLetters);
+    updateLettersDisplay(allLetters);
+  }
+
+  // Shuffle letters
+  function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
-}
+  }
 
-// Function to update the letters display
-function updateLettersDisplay(allLetters) {
-    const lettersContainer = document.getElementById('letters');
-    lettersContainer.innerHTML = ''; // Clear previous letters
+  // Function to update the letters display with current allLetters
+  function updateLettersDisplay() {
+    lettersContainer.innerHTML = ""; // Clear previous letters
     allLetters.forEach((letter, index) => {
-        const letterElement = document.createElement('span');
-        letterElement.textContent = letter;
-        letterElement.classList.add('letter', `letter-${index}`); // Add unique class for each letter
-        letterElement.addEventListener('click', function() {
-            document.getElementById('guess').value += letter;
-            this.classList.add('used');
-            this.removeEventListener('click', this.onclick);
-        });
-        lettersContainer.appendChild(letterElement);
-    });
-}
+      const letterElement = document.createElement("button");
+      letterElement.textContent = letter;
+      letterElement.classList.add("letter"); // Add letter class
 
-// Backspace functionality
-document.getElementById('backspace').addEventListener('click', () => {
-    let guessInput = document.getElementById('guess');
-    let currentGuess = guessInput.value;
-    if (currentGuess.length > 0) {
-        // Remove the last character from the input
-        const removedLetter = currentGuess[currentGuess.length - 1];
-        guessInput.value = currentGuess.substring(0, currentGuess.length - 1);
-        
-        // Re-enable the last used letter in the letter pool
-        const usedLetterElements = document.querySelectorAll(`.letter.used`);
-        const toBeReenabled = Array.from(usedLetterElements).reverse().find(el => el.textContent === removedLetter);
-        if (toBeReenabled) {
-            toBeReenabled.classList.remove('used');
-            toBeReenabled.addEventListener('click', toBeReenabled.onclick);
-            toBeReenabled.style.pointerEvents = 'auto'; // Re-enable pointer events
-        }
+      letterElement.addEventListener("click", function () {
+        toggleLetterSelection(letter, index, this);
+      });
+
+      lettersContainer.appendChild(letterElement);
+    });
+  }
+
+  // Toggle the selection of letters
+  function toggleLetterSelection(letter, index, element) {
+    if (!element.classList.contains("used")) {
+      element.classList.add("used");
+      guessInput.value += letter;
+      letterSelections.push({ letter, index });
+    } else {
+      // Remove the selected letter
+      letterSelections = letterSelections.filter(
+        (selection) =>
+          !(selection.letter === letter && selection.index === index)
+      );
+      updateGuessInputAndSelections(); // Update the input field and selections visually
     }
-});
+  }
 
-// Function to initialize game
-function initializeGame(theme, words) {
-    let allLetters = words.join('').split('');
-    allLetters = shuffle(allLetters);
-    let guesses = [];
-    let guessCount = 0;
-
-    // Set theme in HTML
-    document.getElementById('theme').querySelector('span').textContent = theme;
-
-    // Display each letter as a clickable element
-    updateLettersDisplay(allLetters);
-
-    // Event listener for guess submission
-    document.getElementById('submitGuess').addEventListener('click', () => {
-        const guessInput = document.getElementById('guess');
-        const guess = guessInput.value.trim().toLowerCase();
-        guessCount++;
-        document.getElementById('guessCount').querySelector('span').textContent = guessCount;
-
-        if (guess && !guesses.includes(guess)) {
-            if (words.includes(guess)) {
-                guesses.push(guess);
-                document.getElementById('guesses').innerHTML = guesses.join(', ');
-
-                // Remove guessed word's letters from the letter pool
-                guess.split('').forEach(letter => {
-                    const index = allLetters.indexOf(letter);
-                    if (index > -1) allLetters.splice(index, 1);
-                });
-
-                guessInput.value = ''; // Clear input after guess
-
-                // Update letters display without re-initializing
-                updateLettersDisplay(allLetters);
-            } else {
-                alert("Incorrect guess or not related to the theme. Try again!");
-            }
-        }
-        guessInput.value = ''; // Clear input after guess regardless
+  // Function to update the guess input and letter selections based on `letterSelections`
+  function updateGuessInputAndSelections() {
+    guessInput.value = letterSelections
+      .map((selection) => selection.letter)
+      .join("");
+    // Reset all letters to unused state
+    document
+      .querySelectorAll(".letter")
+      .forEach((button) => button.classList.remove("used"));
+    // Mark currently selected letters as used
+    letterSelections.forEach((selection) => {
+      document
+        .getElementById("letters")
+        .children[selection.index].classList.add("used");
     });
-}
+  }
 
-// Randomly select a theme and fetch words related to the random theme
-const randomTheme = themes[Math.floor(Math.random() * themes.length)];
-fetch(`https://api.datamuse.com/words?ml=${randomTheme}&max=10`)
-    .then(response => response.json())
-    .then(data => {
-        // Filter for single words and limit to 4
-        const words = data.filter(wordObj => !wordObj.word.includes(' ')).slice(0, 4).map(wordObj => wordObj.word);
-        console.log("Fetched words:", words); // Log the fetched words for verification
-        // Initialize the game with fetched words
-        initializeGame(randomTheme, words);
-    })
-    .catch(error => console.error('Error fetching data:', error));
+  // Backspace functionality
+  backspaceButton.addEventListener("click", function () {
+    letterSelections.pop(); // Remove the last selection
+    updateGuessInputAndSelections(); // Reflect this change in the input and visual state
+  });
+
+  // submitGuess function
+  let correctGuesses = [];
+  let incorrectGuesses = [];
+  let guessCount = 0;
+
+  function submitGuess() {
+    guessCount++;
+    const guess = guessInput.value.trim().toLowerCase();
+    if (guess && words.includes(guess) && !guessedWords.includes(guess)) {
+      guessedWords.push(guess);
+      correctGuesses.push(guess); // Add to correct guesses
+      correctGuessesElement.textContent = correctGuesses.join(", "); // Update correct guesses display
+      feedbackElement.textContent = "Correct guess!";
+      guessInput.value = ""; // Reset input field
+      // Remove guessed word's letters from allLetters
+      guess.split("").forEach((guessedLetter) => {
+        const index = allLetters.indexOf(guessedLetter);
+        if (index > -1) {
+          allLetters.splice(index, 1); // Remove the letter
+        }
+      });
+      updateLettersDisplay(); // Update display with remaining letters
+      letterSelections = []; // Reset selections
+    } else {
+      if (!guessedWords.includes(guess)) {
+        incorrectGuesses.push(guess); // Add to incorrect guesses if not already guessed
+        incorrectGuessesElement.textContent = incorrectGuesses.join(", "); // Update incorrect guesses display
+        feedbackElement.textContent = "Incorrect guess. Try again!";
+      } else {
+        feedbackElement.textContent = "Already guessed that word!";
+      }
+      guessInput.value = ""; // Reset input field for a new guess
+    }
+    // Clear used letters after processing the guess
+    clearUsedLetters(); // This ensures the UI is updated irrespective of how the guess was submitted
+    guessCountElement.innerText = `Guesses Attempted: ${guessCount}`;
+    // Check to see if any letters in the pool are left, if not, then the game is won!
+    gameOver()
+  }
+
+  async function gameOver(){
+    // One second timer
+    setTimeout(function(){ 
+        if(allLetters == 0) alert("You Won!")
+    }, 1000);
+  }
+
+  // Update the click event listener to use the refactored function
+  submitGuessButton.addEventListener("click", submitGuess);
+
+  // Listen for the Enter key press on the guess input
+  guessInput.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      submitGuess(); // Call submitGuess function directly if you want to refactor the existing click listener logic into a named function
+      clearUsedLetters(); // Call a function to clear the used letters
+    }
+  });
+
+  function clearUsedLetters() {
+    // Clear the letterSelections array
+    letterSelections = [];
+
+    // Clear the input field
+    guessInput.value = "";
+
+    // Remove the 'used' class from all letter buttons
+    document.querySelectorAll(".letter").forEach((button) => {
+      button.classList.remove("used");
+    });
+  }
+
+  // Scramble letters
+  scrambleButton.addEventListener("click", function () {
+    // Shuffle the current allLetters array
+    shuffle(allLetters);
+    // Update the display with the shuffled letters
+    updateLettersDisplay();
+  });
+
+  // Start and pause timer function modified for incremental timing
+  function startTimer() {
+    timerElement.textContent = "0:00"; // Initialize timer display
+    timer = setInterval(() => {
+      timeElapsed += 1;
+      let minutes = Math.floor(timeElapsed / 60);
+      let seconds = timeElapsed % 60;
+      timerElement.textContent =
+        minutes + ":" + (seconds < 10 ? "0" : "") + seconds; // Format to M:SS
+    }, 1000);
+  }
+
+  pauseTimerButton.addEventListener("click", function () {
+    if (pauseTimerButton.textContent === "Pause") {
+      clearInterval(timer);
+      pauseTimerButton.textContent = "Resume";
+    } else {
+      startTimer();
+      pauseTimerButton.textContent = "Pause";
+    }
+  });
+
+  startTimer(); // Initiate the timer when the game loads
+});
