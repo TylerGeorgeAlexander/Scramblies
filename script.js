@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const timerElement = document.getElementById("timeLeft");
   const pauseTimerButton = document.getElementById("pauseTimer");
   const dateElement = document.getElementById("todayDate");
+  const guessCountElement = document.getElementById("guessCount");
   const randomTheme = themes[Math.floor(Math.random() * themes.length)];
 
   let guessedWords = [];
@@ -124,8 +125,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // submitGuess function
   let correctGuesses = [];
   let incorrectGuesses = [];
+  let guessCount = 0;
 
   function submitGuess() {
+    guessCount++;
     const guess = guessInput.value.trim().toLowerCase();
     if (guess && words.includes(guess) && !guessedWords.includes(guess)) {
       guessedWords.push(guess);
@@ -154,6 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     // Clear used letters after processing the guess
     clearUsedLetters(); // This ensures the UI is updated irrespective of how the guess was submitted
+    guessCountElement.innerText = `Guesses Attempted: ${guessCount}`;
   }
 
   // Update the click event listener to use the refactored function
