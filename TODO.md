@@ -12,6 +12,8 @@
 - [ ] Add a timer to the game.
 - [ ] The timer needs a pause feature.
 - [ ] Include a date display since it will be a daily puzzle. Consider adding an archive for past puzzles.
+- [ ] Correct Guess needs to display in green.
+- [ ] Incorrect Guess needs to display in red.
 
 ### Positive Feedback
 - [x] Cute design. Looks good. Nice and responsive.
