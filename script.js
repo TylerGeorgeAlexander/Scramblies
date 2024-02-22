@@ -39,7 +39,10 @@ document.addEventListener("DOMContentLoaded", function () {
   dateElement.textContent = new Date().toLocaleDateString();
 
   // Fetch and initialize game with random theme words
-  fetch(`https://api.datamuse.com/words?ml=${randomTheme}&max=10`)
+  // adjectives that are often used to describe ocean	/words?rel_jjb=ocean
+  // nouns that are often described by the adjective yellow	/words?rel_jja=yellow
+  // words that are triggered by (strongly associated with) the word "cow"	/words?rel_trg=cow
+  fetch(`https://api.datamuse.com/words?rel_trg=${randomTheme}&max=10`)
     .then((response) => response.json())
     .then((data) => {
       words = data
