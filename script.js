@@ -11,7 +11,36 @@ document.addEventListener("DOMContentLoaded", function () {
   ];
   let words = []; // Placeholder for fetched words
   let allLetters = [];
+  let guessedWords = [];
+  let guessCount = 0;
+  let correctGuesses = [];
+  let incorrectGuesses = [];
+  let letterSelections = [];
+  let timeElapsed = 0; // Initialize timeElapsed for the incremental timer
+  let timer;
 
+  // Check if there's saved data in localStorage
+  const savedCorrectWords = JSON.parse(localStorage.getItem("correctWords"));
+  const savedAllLetters = JSON.parse(localStorage.getItem("allLetters"));
+  if (savedCorrectWords && savedAllLetters) {
+    guessedWords = savedCorrectWords;
+    allLetters = savedAllLetters;
+  } else {
+    localStorage.setItem("correctWords", JSON.stringify([]));
+    localStorage.setItem("allLetters", JSON.stringify([]));
+  }
+
+  // Update localStorage when a correct word is guessed
+  function updateLocalStorage(correctWord) {
+    guessedWords.push(correctWord);
+    localStorage.setItem("correctWords", JSON.stringify(guessedWords));
+  }
+
+  // Update localStorage for allLetters on game initialization
+  function updateAllLettersLocalStorage() {
+    localStorage.setItem("allLetters", JSON.stringify(allLetters));
+  }
+    
   const correctGuessesElement = document
     .getElementById("correctGuesses")
     .querySelector("span");
@@ -29,11 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const dateElement = document.getElementById("todayDate");
   const guessCountElement = document.getElementById("guessCount");
   const randomTheme = themes[Math.floor(Math.random() * themes.length)];
-
-  let guessedWords = [];
-  let timer;
-  let timeElapsed = 0; // Initialize timeElapsed for the incremental timer
-  let letterSelections = []; // Array to track the sequence of letter selections
 
   // Display today's date
   dateElement.textContent = new Date().toLocaleDateString();
@@ -126,9 +150,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // submitGuess function
-  let correctGuesses = [];
-  let incorrectGuesses = [];
-  let guessCount = 0;
 
   function submitGuess() {
     guessCount++;
